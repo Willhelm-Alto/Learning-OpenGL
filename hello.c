@@ -5,6 +5,7 @@
 #include <GL/freeglut.h>
 
 int windowWidth = 500, windowHeight = 500;
+int frameCount = 0;
 
 void resize(int w, int h)
 {
@@ -13,8 +14,9 @@ void resize(int w, int h)
   glViewport(0,0,windowWidth,windowHeight);
 }
 
-void render(void)
+void render()
 {
+  frameCount++;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  
   glBegin(GL_TRIANGLES);
@@ -32,9 +34,20 @@ void render(void)
   glutPostRedisplay();
 }
 
+void timer()
+{
+  
+}
+
+void idle()
+{
+  glutPostRedisplay();
+}
+
 int main(int argc, char *argv[])
 {
   //Inits
+  GLenum GlewInitResult;
   glutInit(&argc, argv);
   glutInitWindowSize(windowWidth, windowHeight);
   glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
@@ -42,6 +55,14 @@ int main(int argc, char *argv[])
   //Define Callbacks
   glutReshapeFunc(resize);
   glutDisplayFunc(render);
+  glutIdleFunc(idle);
+  // glutTimerFunc(timer);
+
+  GlewInitResult = glewInit();
+  if(GLEW_OK != GlewInitResult){
+    printf("Erro :(");
+    return 0;
+  }
   glClearColor(0.0f,0.0f,0.0f,0.0f);
   //loopPrincipal
   glutMainLoop();
